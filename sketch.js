@@ -184,7 +184,7 @@ function mouseReleased(){
         for(let i = 0; i<nodes.length; i++){
             for(let j = 0; j < nodes[i].length; j++){
                 let node = nodes[i][j];
-                if(dist(node.realPos.x,node.realPos.y,mouseX,mouseY) < size){
+                if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
                     nodesToCheck.push(node);
                 }
 
@@ -199,7 +199,7 @@ function mouseReleased(){
         for(let i = 0; i<nodes.length; i++){
             for(let j = 0; j < nodes[i].length; j++){
                 let node = nodes[i][j];
-                if(dist(node.realPos.x,node.realPos.y,mouseX,mouseY) < size){
+                if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
                     nodesToCheck.push(node);
                 }
 
