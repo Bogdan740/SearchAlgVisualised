@@ -101,30 +101,30 @@ function draw(){
                 neighbours.push(finder);
             }
         }catch(err){}
-        // try{
-        //     finder = nodes[i+1][j+1];
-        //     if(finder != undefined && !finder.isObstacle && !finder.pathway){
-        //         neighbours.push(finder);
-        //     }
-        // }catch(err){}
-        // try{
-        //     finder = nodes[i+1][j-1];
-        //     if(finder != undefined && !finder.isObstacle && !finder.pathway){
-        //         neighbours.push(finder);
-        //     }
-        // }catch(err){}
-        // try{
-        //     finder = nodes[i-1][j+1];
-        //     if(finder != undefined && !finder.isObstacle && !finder.pathway){
-        //         neighbours.push(finder);
-        //     }
-        // }catch(err){}
-        // try{
-        //     finder = nodes[i-1][j-1];
-        //     if(finder != undefined && !finder.isObstacle && !finder.pathway){
-        //         neighbours.push(finder);
-        //     }
-        // }catch(err){}
+        try{
+            finder = nodes[i+1][j+1];
+            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+                neighbours.push(finder);
+            }
+        }catch(err){}
+        try{
+            finder = nodes[i+1][j-1];
+            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+                neighbours.push(finder);
+            }
+        }catch(err){}
+        try{
+            finder = nodes[i-1][j+1];
+            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+                neighbours.push(finder);
+            }
+        }catch(err){}
+        try{
+            finder = nodes[i-1][j-1];
+            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+                neighbours.push(finder);
+            }
+        }catch(err){}
         
         if(neighbours.length != 0){
             let nextMove = currentNode.findMove(neighbours);
