@@ -16,6 +16,7 @@ var currentNode;
 var rad = 6;
 
 function setup(){
+    //background("#663399")
     createCanvas(windowWidth,windowHeight); 
     
     size = height/25; 
@@ -54,10 +55,13 @@ var optimalFound = false;
 var pathways = new Array;
 
 function draw(){
-    background("#ffffff");
+    background("#00a7bb");
     checkSpace();
-    if(mouseIsPressed){
-        mousePressed();
+
+    if(insideStartNode){
+        moveNode(startNode)
+    }else if(insideEndNode){
+        moveNode(endNode)
     }
 
     for(let i = 0; i < nodes.length; i++){
@@ -150,15 +154,70 @@ function draw(){
     //noLoop();
 }
 
-// function checkNeighbours(neighbours){
-//     allObstacles = true;
-//     for(let i = 0; i < neighbours.length; i++){
-//         if(!neighbours[i].isObstacle){
-//             allObstacles = false;
-//         }
-//     }
-//     return allObstacles;
-// }
+var insideStartNode = false;
+var insideEndNode = false;
+
+
+function mousePressed(){
+    if(checkInsideSquare(createVector(startNode.pos.x,startNode.pos.y),size,createVector(mouseX,mouseY))){
+        insideStartNode = true;
+    }else if(checkInsideSquare(createVector(endNode.pos.x,endNode.pos.y),size,createVector(mouseX,mouseY))){
+        insideEndNode = true;
+        
+    }
+}
+
+function centerNode(node,nodes){
+    //console.log(nodes.length)
+    let distances = [];
+    for(let i = 0; i < nodes.length; i++){
+        distances.push((nodes[i].pos.x,nodes[i].pos.y,node.pos.x,node.pos.y))
+
+    }
+    let minDist = min(distances);
+    node.pos = nodes[distances.indexOf(minDist)].pos;
+
+}
+function mouseReleased(){
+    if (insideStartNode){
+        let nodesToCheck = [];
+        for(let i = 0; i<nodes.length; i++){
+            for(let j = 0; j < nodes[i].length; j++){
+                let node = nodes[i][j];
+                if(dist(node.realPos.x,node.realPos.y,mouseX,mouseY) < size){
+                    nodesToCheck.push(node);
+                }
+
+            }
+        }
+        insideStartNode = false;
+        centerNode(startNode,nodesToCheck)
+        reset()
+    }
+    if (insideEndNode){
+        let nodesToCheck = [];
+        for(let i = 0; i<nodes.length; i++){
+            for(let j = 0; j < nodes[i].length; j++){
+                let node = nodes[i][j];
+                if(dist(node.realPos.x,node.realPos.y,mouseX,mouseY) < size){
+                    nodesToCheck.push(node);
+                }
+
+            }
+        }
+        insideEndNode = false;
+        centerNode(endNode,nodesToCheck)
+        reset()
+    }
+    
+}
+
+function moveNode(node){
+    node.pos = createVector(mouseX-size/2,mouseY-size/2)
+}
+
+
+
 
 function checkSpace(){
     if(keyIsDown(32)){
@@ -174,27 +233,9 @@ function checkSpace(){
         }
     }
 }
-function mousePressed(){
-    for(let i = 0; i < nodes.length; i++){
-        for(let j = 0; j < nodes[i].length; j++){
-            let object = nodes[i][j]
-            let insideSquare = checkInsideSquare(createVector(object.pos.x,object.pos.y),
-                                                        object.size,createVector(mouseX,mouseY))
-            if (insideSquare){
-                reset()
-                startNode = new StartNode(i*size,j*size,size);
-                currentNode = nodes[i][j];
-                currentNodePointer = createVector(i,j)
-            }
-        }
-    }
-    
-}
 
 
-
-
-function checkInsideSquare(c1,size,coord){
+function checkInsideSquare(c1,size,coord){ // c1 = the top left corner of the square, coord = coord to check if inside given square
     if(coord.x > c1.x && coord.y > c1.y && coord.x < c1.x + size && coord.y < c1.y + size){
         return true
     }
