@@ -76,32 +76,32 @@ function draw(){
         let i = currentNodePointer.x;
         let j = currentNodePointer.y;
         
-        try{
+        try{// Right
             finder = nodes[i+1][j];
             if(finder != undefined && !finder.isObstacle && !finder.pathway){
                 neighbours.push(finder);
             }
             
         }catch(err){}
-        try{
+        try{// Left
             finder = nodes[i-1][j];
             if(finder != undefined && !finder.isObstacle && !finder.pathway){
                 neighbours.push(finder);
             }
         }catch(err){}
-        try{
+        try{// Top
             finder = nodes[i][j+1];
             if(finder != undefined && !finder.isObstacle && !finder.pathway){
                 neighbours.push(finder);
             }
         }catch(err){}
-        try{
+        try{// Bottom
             finder = nodes[i][j-1];
             if(finder != undefined && !finder.isObstacle && !finder.pathway){
                 neighbours.push(finder);
             }
         }catch(err){}
-        try{// bottom right
+        try{// Bottom right
             finder = nodes[i+1][j+1];
             let checkSides
             let n1 = nodes[i][j+1];
@@ -119,7 +119,7 @@ function draw(){
         }catch(err){
             //console.log(err)
         }
-        try{// top right
+        try{// Top right
             finder = nodes[i+1][j-1];
             let checkSides
             let n1 = nodes[i+1][j];
@@ -135,7 +135,7 @@ function draw(){
         }catch(err){
             //console.log(err)
         }
-        try{// bottom left
+        try{// Bottom left
             finder = nodes[i-1][j+1];
             let checkSides;
             let n1 = nodes[i-1][j];
@@ -152,7 +152,7 @@ function draw(){
         }catch(err){
             //console.log(err)
         }
-        try{// top left
+        try{// Top left
             finder = nodes[i-1][j-1];
             let checkSides
             let n1 = nodes[i][j-1];
