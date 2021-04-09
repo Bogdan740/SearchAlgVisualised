@@ -71,6 +71,20 @@ function draw(){
 
     }
     let finder;
+    if(optimalFound && !insideStartNode && pathways.length > 2){
+        push()
+        noFill();
+        strokeWeight(3)
+        stroke("#fff700")
+        beginShape()
+        vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
+        for(let i =0; i< pathways.length; i++){
+            vertex(pathways[i].realPos.x,pathways[i].realPos.y);
+        }
+        
+        endShape()
+        pop()
+    }
     if(!optimalFound){
         let neighbours = new Array;
         let i = currentNodePointer.x;
@@ -236,7 +250,6 @@ function mouseReleased(){
         }
         insideStartNode = false;
         centerNode(startNode,nodesToCheck)
-        reset()
     }
     if (insideEndNode){
         let nodesToCheck = [];
@@ -251,8 +264,8 @@ function mouseReleased(){
         }
         insideEndNode = false;
         centerNode(endNode,nodesToCheck)
-        reset()
     }
+    reset()
     
 }
 
@@ -286,6 +299,7 @@ function checkInsideSquare(c1,size,coord){ // c1 = the top left corner of the sq
 
 }
 function reset(){
+    pathways = [];
     optimalFound = false;
     for(let i = 0; i < nodes.length; i++){
         for(let j = 0; j < Math.floor(height/size); j++){
