@@ -19,7 +19,7 @@ function setup(){
     //background("#663399")
     createCanvas(windowWidth,windowHeight); 
     
-    size = height/20; 
+    size = height/25; 
 
     endNodePos = createVector(size*19,size*19);
     startNodePos = createVector(size*0,size*0);
@@ -73,13 +73,17 @@ function draw(){
     let finder;
     if(optimalFound && !insideStartNode && pathways.length > 2){
         push()
-        noFill();
         strokeWeight(3)
         stroke("#fff700")
         beginShape()
+        noFill();
         vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
         for(let i =0; i< pathways.length; i++){
             vertex(pathways[i].realPos.x,pathways[i].realPos.y);
+            push();
+            fill("#fff700");
+            ellipse(pathways[i].realPos.x,pathways[i].realPos.y,10)
+            pop();
         }
         
         endShape()
