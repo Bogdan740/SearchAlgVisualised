@@ -19,7 +19,7 @@ function setup(){
     //background("#663399")
     createCanvas(windowWidth,windowHeight); 
     
-    size = height/25; 
+    size = height/20; 
 
     endNodePos = createVector(size*19,size*19);
     startNodePos = createVector(size*0,size*0);
@@ -101,30 +101,74 @@ function draw(){
                 neighbours.push(finder);
             }
         }catch(err){}
-        try{
+        try{// bottom right
             finder = nodes[i+1][j+1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+            let checkSides
+            let n1 = nodes[i][j+1];
+            let n2 = nodes[i+1][j];
+
+            if(n1 == undefined || n2 == undefined){
+                checkSides = true;
+            }else{
+                checkSides = (!n1.isObstacle && !n2.isObstacle)
+            }
+
+            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
                 neighbours.push(finder);
             }
-        }catch(err){}
-        try{
+        }catch(err){
+            //console.log(err)
+        }
+        try{// top right
             finder = nodes[i+1][j-1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+            let checkSides
+            let n1 = nodes[i+1][j];
+            let n2 = nodes[i][j-1];
+            if(n1 == undefined || n2 == undefined){
+                checkSides = true;
+            }else{
+                checkSides = (!n1.isObstacle && !n2.isObstacle)
+            }
+            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
                 neighbours.push(finder);
             }
-        }catch(err){}
-        try{
+        }catch(err){
+            //console.log(err)
+        }
+        try{// bottom left
             finder = nodes[i-1][j+1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+            let checkSides;
+            let n1 = nodes[i-1][j];
+            let n2 = nodes[i][j+1];
+            if(n1 == undefined || n2 == undefined){
+                checkSides = true;
+            }else{
+                checkSides = (!n1.isObstacle && !n2.isObstacle)
+            }
+
+            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
                 neighbours.push(finder);
             }
-        }catch(err){}
-        try{
+        }catch(err){
+            //console.log(err)
+        }
+        try{// top left
             finder = nodes[i-1][j-1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
+            let checkSides
+            let n1 = nodes[i][j-1];
+            let n2 = nodes[i-1][j];
+            if(n1 == undefined || n2 == undefined){
+                checkSides = true;
+            }else{
+                checkSides = (!n1.isObstacle && !n2.isObstacle)
+            }
+
+            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
                 neighbours.push(finder);
             }
-        }catch(err){}
+        }catch(err){
+            //console.log(err)
+        }
         
         if(neighbours.length != 0){
             let nextMove = currentNode.findMove(neighbours);
@@ -225,7 +269,7 @@ function checkSpace(){
             for(let j = 0; j < nodes[i].length; j++){
                 let object = nodes[i][j]
                 let insideSquare = checkInsideSquare(createVector(object.pos.x,object.pos.y),
-                                                            object.size*2,createVector(mouseX,mouseY))
+                                                            object.size,createVector(mouseX,mouseY))
                 if (insideSquare){
                     object.isObstacle = true;
                 }
