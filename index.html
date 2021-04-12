@@ -5,22 +5,76 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css"
+    rel="stylesheet"
+    />
+
     <style>
         *{
-            overflow: hidden;
-            margin : 0;
-            padding: 0;
+            overflow:hidden;
+            padding:0;
+            margin:0;
         }
-
+        .speng{
+            z-index: 1;
+            position: absolute;
+            padding:50px;
+            background-color: rgba(140,40,220);
+            left : 80vw;
+            border-radius: 10px;
+        }
+        canvas{
+            border-radius: 10px;
+        }
+        
     </style>
+</head>
+<body>
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"
+    ></script>
+    
+    <div class = "speng" id="speng" draggable="false">
+        <select name="algUsed" id="algUsed">
+            <option value="Astar">A* Search</option>
+            <option value="Bogdan">Bogdan Search</option>
+            <option value="Dikstra">Dikstra's Search</option>
+            <option value="BestFirst">Greedy best first Search</option>
+        </select>
+    </div>
+
+  
     <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
     <script src = "sketch.js"></script>
-    <script src = "node.js"></script>
+
     <script src = "startNode.js"></script>
     <script src = "endNode.js"></script>
- 
+
+    <script src = "Node.js"></script>
+
+    <script src = "BogdanFinder/BogdanFinder.js"></script>
+    <script src = "BogdanFinder/BogdanNode.js"></script>
+
+    <script src = "AStarFinder/AStarFinder.js"></script>
+    <script src = "AStarFinder/AStarNode.js"></script>
+    <script src = "DragElement.js"></script>
+
+
+  
     
 </body>
 </html>

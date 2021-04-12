@@ -5,7 +5,7 @@ class Node{
         this.pos = createVector(posx,posy);
         this.size = size;
         this.realPos = createVector(posx + size/2, posy+size/2); // Positon of the center of each node
-        this.proxToTarget = round(dist(posx,posy,target.x,target.y),2);
+        this.proxToTarget = round(dist(posx,posy,posx,target.y) + dist(posx,posy,target.x,posy),2);
         this.isStart = isStart;
         this.isEnd = isEnd;
         //this.col = "#663399"
@@ -28,24 +28,20 @@ class Node{
         rect(this.pos.x,this.pos.y,this.size-offset,this.size-offset,rad,rad,rad,rad);
         stroke(0);
         textAlign(CENTER)
-        //noStroke()
-        //fill(255,0,0)
-        //text(this.proxToTarget,this.realpos.x,this.realpos.y)
-        //ellipse(this.realpos.x,this.realpos.y,10)
         pop();
     }
-    checkProx(otherNode){
-        return round(dist(this.pos.x,this.pos.y,otherNode.pos.x,otherNode.pos.y),2);
-    }
-    findMove(others){
-        let distances = [];
-        for(let i = 0; i < others.length; i++){
-            distances.push(others[i].proxToTarget)
-            others[i].checked= true;
+    // checkProx(otherNode){
+    //     return round(dist(this.pos.x,this.pos.y,otherNode.pos.x,otherNode.pos.y),2);
+    // }
+    // findMove(others){
+    //     let distances = [];
+    //     for(let i = 0; i < others.length; i++){
+    //         distances.push(others[i].proxToTarget)
+    //         others[i].checked= true;
             
-        }
-        var minVal = min(distances);
-        return others[distances.indexOf(minVal)]
+    //     }
+    //     let minVal = min(distances);
+    //     return others[distances.indexOf(minVal)]
 
-    }
+    // }
 }

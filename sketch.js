@@ -15,53 +15,92 @@ var currentNode;
 
 var rad = 6;
 
+let effectiveHeight;
+let effectiveWidth;
+
+var algUsed = "Astar"
+
+let openList = [];
+let closedList = [];
+
+
+
 function setup(){
-    //background("#663399")
-    createCanvas(windowWidth,windowHeight); 
+    createCanvas(windowWidth*0.8,windowHeight); 
+
     
     size = height/25; 
-
-    endNodePos = createVector(size*19,size*19);
+    effectiveWidth = floor(width/size)*size;
+    effectiveHeight = floor(height/size)*size;
+    endNodePos = createVector(size*(floor(width/size)-1),size*(floor(height/size)-1));
     startNodePos = createVector(size*0,size*0);
 
     startNode = new StartNode(startNodePos.x,startNodePos.y,size);
     endNode = new EndNode(endNodePos.x,endNodePos.y,size);
-
-    for(let i = 0; i < Math.floor(width/size); i++){
-        nodes.push(new Array);
-    }
-    for(let i = 0; i < nodes.length; i++){
-        for(let j = 0; j < Math.floor(height/size); j++){
-            if(i*size == endNodePos.x && j*size == endNodePos.y){ //Create The EndNode in the array
-                nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
-                endNodePointer = createVector(i,j) 
-
-            }else if(i*size == startNodePos.x && j*size == startNodePos.y){ //Create the starting node in the array
-                nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
-                currentNodePointer = createVector(i,j);
-            }
-            
-            else{
-            nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
-            }
+    
+    if(algUsed == "Bogdan"){
+        for(let i = 0; i < Math.floor(width/size); i++){
+            nodes.push(new Array);
         }
-    }//End of loop
-    currentNode = nodes[currentNodePointer.x][currentNodePointer.y]
+        for(let i = 0; i < nodes.length; i++){
+            for(let j = 0; j < Math.floor(height/size); j++){
+                if(i*size == endNodePos.x && j*size == endNodePos.y){ //Create The EndNode in the array
+                    nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
+                    endNodePointer = createVector(i,j) 
+
+                }else if(i*size == startNodePos.x && j*size == startNodePos.y){ //Create the starting node in the array
+                    nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
+                    currentNodePointer = createVector(i,j);
+                }
+                
+                else{
+                nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
+                }
+                currentNode = nodes[currentNodePointer.x][currentNodePointer.y]
+            }
+        }//End of loop
+    }else if(algUsed == "Astar" || algUsed == "Dikstra" || algUsed == "BestFirst"){
+        for(let i = 0; i < Math.floor(width/size); i++){
+            nodes.push(new Array);
+        }
+        for(let i = 0; i < nodes.length; i++){
+            for(let j = 0; j < Math.floor(height/size); j++){
+                if(i*size == endNodePos.x && j*size == endNodePos.y){ //Create The EndNode in the array
+                    nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
+                    endNodePointer = createVector(i,j) 
+
+                }else if(i*size == startNodePos.x && j*size == startNodePos.y){ //Create the starting node in the array
+                    nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
+                    currentNodePointer = createVector(i,j);
+                }
+                
+                else{
+                nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
+                    }
+                }
+            }//End of loop
+        currentNode = nodes[currentNodePointer.x][currentNodePointer.y]
+        initiateFinder(currentNode);
+    }
 
 }
 
 var previous;
 var optimalFound = false;
 var pathways = new Array;
+var holder;
+var done = false
+
+var checkAlgUsed;
 
 function draw(){
-    background("#00a7bb");
+    background("#00a7bb")
     checkSpace();
 
     if(insideStartNode){
-        moveNode(startNode)
+        moveNodeToMouse(startNode)
     }else if(insideEndNode){
-        moveNode(endNode)
+        moveNodeToMouse(endNode)
     }
 
     for(let i = 0; i < nodes.length; i++){
@@ -70,150 +109,70 @@ function draw(){
         }
 
     }
-    let finder;
-    if(optimalFound && !insideStartNode && pathways.length > 2){
-        push()
-        strokeWeight(3)
-        stroke("#fff700")
-        beginShape()
-        noFill();
-        vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
-        for(let i =0; i< pathways.length; i++){
-            vertex(pathways[i].realPos.x,pathways[i].realPos.y);
-            push();
-            fill("#fff700");
-            ellipse(pathways[i].realPos.x,pathways[i].realPos.y,10)
-            pop();
+
+    if(algUsed == "Astar" || algUsed == "Dikstra" || algUsed == "BestFirst"){
+        holder = nodes[endNodePointer.x][endNodePointer.y];
+        while(done){
+            pathways.push(holder)
+            if(holder.parent != undefined){
+                holder = holder.parent
+            }else{
+                done = false;
+            }
+        
         }
-        
-        endShape()
-        pop()
     }
-    if(!optimalFound){
-        let neighbours = new Array;
-        let i = currentNodePointer.x;
-        let j = currentNodePointer.y;
-        
-        try{// Right
-            finder = nodes[i+1][j];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
-                neighbours.push(finder);
+
+    if(optimalFound && !insideStartNode){ // Runs after the path is found
+        if(algUsed == "Bogdan" && pathways.length > 2){
+            push()
+            strokeWeight(3)
+            stroke("#fff700")
+            beginShape()
+            noFill();
+            vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
+            for(let i =0; i< pathways.length; i++){
+                vertex(pathways[i].realPos.x,pathways[i].realPos.y);
+                push();
+                fill("#fff700");
+                ellipse(pathways[i].realPos.x,pathways[i].realPos.y,10)
+                pop();
             }
             
-        }catch(err){}
-        try{// Left
-            finder = nodes[i-1][j];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
-                neighbours.push(finder);
+            endShape()
+            pop()
+        }else if(algUsed == "Astar" || algUsed == "Dikstra" || algUsed == "BestFirst"){
+            push()
+            strokeWeight(4)
+            stroke("#fff700")
+            beginShape()
+            noFill();
+            //vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
+            for(let i =0; i< pathways.length; i++){
+                vertex(pathways[i].realPos.x,pathways[i].realPos.y);
+                push();
+                fill("#fff700");
+                ellipse(pathways[i].realPos.x,pathways[i].realPos.y,10)
+                pop();
             }
-        }catch(err){}
-        try{// Top
-            finder = nodes[i][j+1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
-                neighbours.push(finder);
-            }
-        }catch(err){}
-        try{// Bottom
-            finder = nodes[i][j-1];
-            if(finder != undefined && !finder.isObstacle && !finder.pathway){
-                neighbours.push(finder);
-            }
-        }catch(err){}
-        try{// Bottom right
-            finder = nodes[i+1][j+1];
-            let checkSides
-            let n1 = nodes[i][j+1];
-            let n2 = nodes[i+1][j];
-
-            if(n1 == undefined || n2 == undefined){
-                checkSides = true;
-            }else{
-                checkSides = (!n1.isObstacle && !n2.isObstacle)
-            }
-
-            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
-                neighbours.push(finder);
-            }
-        }catch(err){
-            //console.log(err)
+            vertex()
+            vertex(startNode.pos.x + size/2,startNode.pos.y + size/2)
+            
+            endShape()
+            pop()
         }
-        try{// Top right
-            finder = nodes[i+1][j-1];
-            let checkSides
-            let n1 = nodes[i+1][j];
-            let n2 = nodes[i][j-1];
-            if(n1 == undefined || n2 == undefined){
-                checkSides = true;
-            }else{
-                checkSides = (!n1.isObstacle && !n2.isObstacle)
-            }
-            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
-                neighbours.push(finder);
-            }
-        }catch(err){
-            //console.log(err)
-        }
-        try{// Bottom left
-            finder = nodes[i-1][j+1];
-            let checkSides;
-            let n1 = nodes[i-1][j];
-            let n2 = nodes[i][j+1];
-            if(n1 == undefined || n2 == undefined){
-                checkSides = true;
-            }else{
-                checkSides = (!n1.isObstacle && !n2.isObstacle)
-            }
-
-            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
-                neighbours.push(finder);
-            }
-        }catch(err){
-            //console.log(err)
-        }
-        try{// Top left
-            finder = nodes[i-1][j-1];
-            let checkSides
-            let n1 = nodes[i][j-1];
-            let n2 = nodes[i-1][j];
-            if(n1 == undefined || n2 == undefined){
-                checkSides = true;
-            }else{
-                checkSides = (!n1.isObstacle && !n2.isObstacle)
-            }
-
-            if(finder != undefined && !finder.isObstacle && !finder.pathway && checkSides){
-                neighbours.push(finder);
-            }
-        }catch(err){
-            //console.log(err)
-        }
-        
-        if(neighbours.length != 0){
-            let nextMove = currentNode.findMove(neighbours);
-
-            currentNode.col = "#00008b"
-            nextMove.col = "#00f7e7";
-            nextMove.pathway = true;
-            pathways.push(nextMove);
-            currentNode = nextMove;
-            currentNodePointer = this.arrPos;
-            if(currentNode.proxToTarget == 0){
-                optimalFound = true;
-                console.log("We have found the target");
-                console.log(millis()/1000)
-
-            }
-            currentNodePointer = createVector(currentNode.arrPos.x,currentNode.arrPos.y)
-        }
-        else{
-            unStuck(pathways);
+    }
+    if(!optimalFound){// Runs while path is not found
+        if(algUsed == "Bogdan"){
+            BogdanFinder()
+        }else if(algUsed == "Astar" || algUsed == "Dikstra" || algUsed == "BestFirst"){
+            AStarFinder();
         }
         
     }
 
     startNode.show();
     endNode.show();
-    //noLoop();
 }
 
 var insideStartNode = false;
@@ -227,6 +186,7 @@ function mousePressed(){
         insideEndNode = true;
         
     }
+    
 }
 
 function centerNode(node,nodes){
@@ -240,40 +200,62 @@ function centerNode(node,nodes){
     node.pos = nodes[distances.indexOf(minDist)].pos;
 
 }
-function mouseReleased(){
-    if (insideStartNode){
-        let nodesToCheck = [];
-        for(let i = 0; i<nodes.length; i++){
-            for(let j = 0; j < nodes[i].length; j++){
-                let node = nodes[i][j];
-                if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
-                    nodesToCheck.push(node);
-                }
+function mouseReleased(e){
+    if(e.target.id == "defaultCanvas0"){
 
+        if (insideStartNode){
+            if(startNode.pos.x + size / 2 > effectiveWidth || startNode.pos.x + size / 2 < 0 || startNode.pos.y + size / 2 > effectiveHeight || startNode.pos.y + size / 2 < 0){
+                startNode.pos = createVector(0,0)
+                insideStartNode = false;
+            }
+            else{
+                let nodesToCheck = [];
+                for(let i = 0; i<nodes.length; i++){
+                    for(let j = 0; j < nodes[i].length; j++){
+                        let node = nodes[i][j];
+                        if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
+                            nodesToCheck.push(node);
+                        }
+
+                    }
+                }
+                insideStartNode = false;
+                centerNode(startNode,nodesToCheck)
             }
         }
-        insideStartNode = false;
-        centerNode(startNode,nodesToCheck)
-    }
-    if (insideEndNode){
-        let nodesToCheck = [];
-        for(let i = 0; i<nodes.length; i++){
-            for(let j = 0; j < nodes[i].length; j++){
-                let node = nodes[i][j];
-                if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
-                    nodesToCheck.push(node);
-                }
+        if (insideEndNode){
+            if(endNode.pos.x + size / 2 > effectiveWidth || endNode.pos.x + size / 2 < 0 || endNode.pos.y + size / 2 > effectiveHeight || endNode.pos.y + size / 2 < 0){
+                endNode.pos = createVector(size*(floor(width/size)-1),size*(floor(height/size)-1))
+                insideEndNode = false;
+            }
+            else{
+                let nodesToCheck = [];
+                for(let i = 0; i<nodes.length; i++){
+                    for(let j = 0; j < nodes[i].length; j++){
+                        let node = nodes[i][j];
+                        if(dist(node.realPos.x,node.realPos.y,mouseX+size/2,mouseY+size/2) < size){
+                            nodesToCheck.push(node);
+                        }
 
+                    }
+                }
+                insideEndNode = false;
+                centerNode(endNode,nodesToCheck)
             }
         }
-        insideEndNode = false;
-        centerNode(endNode,nodesToCheck)
+        reset()
+    }else if(e.target.id == "algUsed"){
+        checkAlgUsed = document.getElementById("algUsed").value;
+        if(algUsed != checkAlgUsed){
+            algUsed = checkAlgUsed;
+            document.activeElement.blur()
+            reset();
+        }
     }
-    reset()
     
 }
 
-function moveNode(node){
+function moveNodeToMouse(node){
     node.pos = createVector(mouseX-size/2,mouseY-size/2)
 }
 
@@ -303,36 +285,58 @@ function checkInsideSquare(c1,size,coord){ // c1 = the top left corner of the sq
 
 }
 function reset(){
-    pathways = [];
-    optimalFound = false;
-    for(let i = 0; i < nodes.length; i++){
-        for(let j = 0; j < Math.floor(height/size); j++){
-            if(!nodes[i][j].isObstacle){
-                if(i*size == endNodePos.x && j*size == endNodePos.y){ //Create The EndNode in the array
-                    nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
-                    endNodePointer = createVector(i,j) 
+    if(algUsed == "Bogdan"){
+        pathways = [];
+        optimalFound = false;
+        for(let i = 0; i < nodes.length; i++){
+            for(let j = 0; j < Math.floor(height/size); j++){
+                if(!nodes[i][j].isObstacle){
+                    if(i*size == endNode.pos.x && j*size == endNode.pos.y){ //Create The EndNode in the array
+                        nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
+                        endNodePointer = createVector(i,j) 
 
-                }else if(i*size == startNode.pos.x && j*size == startNode.pos.y){ //Create the starting node in the array
-                    nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
-                    currentNodePointer = createVector(i,j);
-                }
-                
-                else{
-                nodes[i][j] = new Node(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
+                    }else if(i*size == startNode.pos.x && j*size == startNode.pos.y){ //Create the starting node in the array
+                        nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
+                        currentNodePointer = createVector(i,j);
+                    }
+                    
+                    else{
+                        nodes[i][j] = new BogdanNode(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
+                    }
                 }
             }
         }
+        currentNode = nodes[currentNodePointer.x][currentNodePointer.y]
+    }else if(algUsed == "Astar" || algUsed == "Dikstra" || algUsed == "BestFirst"){
+        done = false;
+        pathways = [];
+        optimalFound = false;
+        openList = [];
+        closedList = [];
+
+        for(let i = 0; i < nodes.length; i++){
+            for(let j = 0; j < Math.floor(height/size); j++){
+                if(!nodes[i][j].isObstacle){
+                    if(i*size == endNode.pos.x && j*size == endNode.pos.y){ //Create The EndNode in the array
+                        nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,false,true,createVector(i,j),false,false,false);
+                        endNodePointer = createVector(i,j) 
+
+                    }else if(i*size == startNode.pos.x && j*size == startNode.pos.y){ //Create the starting node in the array
+                        nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,true,false,createVector(i,j),false,false,false);
+                        currentNodePointer = createVector(i,j);
+                    }
+                    
+                    else{
+                    nodes[i][j] = new AStarNode(i*size,j*size,size,endNode.pos,false,false,createVector(i,j),false,false,false);
+                    }
+                }
+            }
+        }
+        currentNode = nodes[currentNodePointer.x][currentNodePointer.y]
+        initiateFinder(currentNode);
+
     }
 }
 
-function unStuck(pathways){
-    for(let i = 0; i < pathways.length; i++){
-        pathways[i].pathway = false;
-        pathways[i].isObstacle = true;
-    }
-    reset()
-    
-
-}
 
 
