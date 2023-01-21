@@ -1,33 +1,43 @@
-var offset = 0.5;
+let offset = 0.5;
 
-class Node{
-    constructor(posx,posy,size,target,isStart,isEnd,arrPos,checked,pathway,isObstacle){
-        this.pos = createVector(posx,posy);
-        this.size = size;
-        this.realPos = createVector(posx + size/2, posy+size/2); // Positon of the center of each node
-        this.proxToTarget = round(dist(posx,posy,posx,target.y) + dist(posx,posy,target.x,posy),2);
-        this.isStart = isStart;
-        this.isEnd = isEnd;
-        //this.col = "#663399"
-        this.col = "#ffffff"
-        this.arrPos = arrPos;
-        this.checked = checked;
-        this.pathway = pathway;
-        this.isObstacle = isObstacle;
+class Node {
+  constructor(posx, posy, squareSize, target, type, visited) {
+    this.pos = createVector(posx * squareSize, posy * squareSize);
+    this.realPos = createVector(this.pos.x + squareSize / 2, this.pos.y + squareSize / 2);
+    this.type = type;
+    this.squareSize = squareSize;
+    // Currently using manhattan distance
+    this.proxToTarget = round(
+      dist(posx, posy, posx, target.y) + dist(posx, posy, target.x, posy),
+      2
+    );
+    if (type === nodeTypes.start) {
+      this.col = 'green';
+    } else if (type === nodeTypes.end) {
+      this.col = 'red';
+    } else if (type === nodeTypes.empty) {
+      this.col = '#ffffff';
+    } else {
+      console.warning(`Invalid initializing node type : ${type}`);
     }
-    show(){
-        push();
-        noStroke();
-        if(this.isObstacle){
-            this.col = "#663399";
-        }
-        else if(this.checked && !this.pathway){
-            this.col = "#00a7bb";
-        }
-        fill(this.col);
-        rect(this.pos.x,this.pos.y,this.size-offset,this.size-offset,rad,rad,rad,rad);
-        stroke(0);
-        textAlign(CENTER)
-        pop();
-    }
+    this.visited = visited;
+  }
+
+  show() {
+    push();
+    fill(this.col);
+    rect(this.pos.x, this.pos.y, this.squareSize - offset, this.squareSize - offset);
+    stroke(0);
+    pop();
+  }
+
+  setVisited() {
+    self.visited = true;
+  }
+  setPath() {
+    self.type = nodeTypes.path;
+  }
+  setObstacle() {
+    self.types = nodeTypes.obstacle;
+  }
 }
