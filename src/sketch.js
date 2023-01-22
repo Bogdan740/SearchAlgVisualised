@@ -1,3 +1,4 @@
+// TODO : consider adding some way to add some type to know what cell we are currently searching
 const nodeTypes = {
   obstacle: 'obstacle',
   empty: 'empty',
@@ -7,82 +8,114 @@ const nodeTypes = {
   end: 'end',
 };
 
-let gridSize = 5; // Number of squares in one row/col of the N x N grid
+const nbours = [
+  [1, 0],
+  [0, 1],
+  [-1, 0],
+  [0, -1],
+  // [1, -1],
+  // [-1, 1],
+  // [1, 1],
+  // [-1, -1],
+];
+
+let gridSize = 40; // Number of squares in one row/col of the N x N grid
 let squareSize; // Side length of individual square in the grid
 let nodes = [];
-let node;
+let startNode = [0, 0];
+let targetNode = [gridSize - 1, gridSize - 1];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   squareSize = Math.floor(700 / gridSize);
 
   // Initialize the grid of nodes
+  initNodes(nodes);
+}
+
+let pathway = [];
+
+function draw() {
+  aStar();
+  drawNodes(nodes);
+
+  if (pathway.length !== 0) {
+    drawPathway(pathway);
+  }
+
+  // Adding obstacles
+  if (mouseIsPressed === true) {
+    let i = Math.floor(mouseX / squareSize);
+    let j = Math.floor(mouseY / squareSize);
+    if (isValidNbour(i, j, gridSize)) nodes[i][j].setType(nodeTypes.obstacle);
+  }
+}
+
+function drawPathway(pathway) {
+  push();
+  fill('yellow');
+  noStroke();
+  for (let i = 0; i < pathway.length; i++) {
+    ellipse(
+      pathway[i].x * squareSize + squareSize / 2,
+      pathway[i].y * squareSize + squareSize / 2,
+      15
+    );
+  }
+  pop();
+  push();
+  stroke('yellow');
+  noFill();
+  strokeWeight(4);
+  beginShape();
+  for (let i = 0; i < pathway.length; i++) {
+    vertex(pathway[i].x * squareSize + squareSize / 2, pathway[i].y * squareSize + squareSize / 2);
+  }
+  endShape();
+  pop();
+}
+
+function initNodes(nodes) {
   for (let i = 0; i < gridSize; i++) {
     let strip = [];
     for (let j = 0; j < gridSize; j++) {
       let type = nodeTypes.empty;
-      if (i == 0 && j == 0) {
+      if (i == startNode[0] && j == startNode[1]) {
         type = nodeTypes.start;
-      } else if (i == gridSize - 1 && j == gridSize - 1) {
+      } else if (i === targetNode[0] && j === targetNode[1]) {
         type = nodeTypes.end;
       }
 
-      strip.push(new Node(i, j, squareSize, createVector(1, 1), type));
+      strip.push(
+        new Node(i, j, squareSize, createVector(targetNode[0], targetNode[1]), type, false)
+      );
     }
-    nodes.push(strip);
+    nodes[i] = strip;
   }
 }
 
-const nbours = [
-  [1, 0],
-  [-1, 0],
-  [0, 1],
-  [0, -1],
-];
-
-let queue = [[0, 0, null]];
-let path = [];
-function draw() {
-  // BFS
-  for (let i = 0; i < queue.length; i++) {
-    let toCheck = queue.shift();
-    let nodeToCheck = nodes[toCheck[0]][toCheck[1]];
-    if (nodeToCheck.type === nodeTypes.visited) continue;
-    nodeToCheck.setType(nodeTypes.visited);
-    nodeToCheck.previous = toCheck[2];
-    nbours.forEach((nbour) => {
-      let nx = nodeToCheck.pos.x + nbour[0];
-      let ny = nodeToCheck.pos.y + nbour[1];
-
-      if (0 <= nx && nx < gridSize && 0 <= ny && ny < gridSize) {
-        if (nodes[nx][ny].type !== nodeTypes.visited) {
-          queue.push([nx, ny, nodeToCheck]);
-        }
-      }
-    });
-  }
-
-  if (queue.length == 0 && path.length == 0) {
-    // Find the path starting from the end node and working backwards, store it in path
-    let currentNode = nodes[gridSize - 1][gridSize - 1];
-    while (currentNode) {
-      path.push(currentNode.pos);
-      currentNode = currentNode.previous;
-    }
-  }
-
+function drawNodes(nodes) {
   for (let i = 0; i < gridSize; i++) {
     for (let j = 0; j < gridSize; j++) {
       nodes[i][j].show();
     }
   }
+}
 
-  if (path.length != 0) {
-    for (let i = 0; i < path.length; i++) {
-      push();
-      fill('yellow');
-      ellipse(path[i].x * squareSize, path[i].y * squareSize, 10);
-      pop();
+function resetNodes(nodes) {
+  for (let i = 0; i < gridSize; i++) {
+    for (let j = 0; j < gridSize; j++) {
+      nodes[i][j].reset();
     }
+  }
+}
+
+function keyPressed() {
+  if (keyCode === 32) {
+    resetNodes(nodes);
+    pathway = [];
+    queue = [startNode];
+    openList = [startNode];
+    endFound = false;
   }
 }
