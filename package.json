@@ -1,0 +1,22 @@
+{
+  "name": "searchalgvisualised",
+  "version": "1.0.0",
+  "description": "# Update as of January 2023",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bogdan740/SearchAlgVisualised.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bogdan740/SearchAlgVisualised/issues"
+  },
+  "homepage": "https://github.com/Bogdan740/SearchAlgVisualised#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.2.4"
+  }
+}

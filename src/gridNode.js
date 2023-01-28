@@ -1,17 +1,15 @@
 let offset = 0;
 
-class Node {
+class GridNode {
   constructor(posx, posy, squareSize, target, type) {
-    this.pos = createVector(posx, posy);
-    this.realPos = createVector(this.pos.x * squareSize, this.pos.y * squareSize);
+    this.pos = myp5.createVector(posx, posy);
+    this.realPos = myp5.createVector(this.pos.x * squareSize, this.pos.y * squareSize);
     this.type = type;
     this.squareSize = squareSize;
 
     // TODO : Add support for the euclidian distance
-    this.proxToTarget = round(
-      dist(posx, posy, posx, target.y) + dist(posx, posy, target.x, posy),
-      2
-    );
+    this.proxToTarget =
+      myp5.dist(posx, posy, posx, target.y) + myp5.dist(posx, posy, target.x, posy);
 
     if (type === nodeTypes.start) {
       this.g = 0;
@@ -24,7 +22,7 @@ class Node {
   }
 
   show() {
-    push();
+    myp5.push();
     let col = 'white';
     // TODO : Use a case statement
     if (this.type == nodeTypes.start) {
@@ -36,42 +34,43 @@ class Node {
     } else if (this.type === nodeTypes.obstacle) {
       col = 'black';
     }
-    fill(col);
-    rect(this.realPos.x, this.realPos.y, this.squareSize - offset, this.squareSize - offset);
+    myp5.fill(col);
+    myp5.rect(this.realPos.x, this.realPos.y, this.squareSize - offset, this.squareSize - offset);
     // stroke('black');
-    // fill('black');
+    // myp5.fill('black');
     // textSize(15);
     // text(
     //   `g : ${this.g}, h : ${this.h}, f : ${this.g + this.h}`,
     //   this.realPos.x + 30,
     //   this.realPos.y + 30
     // );
-    pop();
+    myp5.pop();
   }
 
   setType(type) {
-    if (this.type != 'end' && this.type != 'start') {
-      this.type = type;
-    }
+    if (this.type === 'end' || this.type === 'start') return;
+    this.type = type;
   }
-
-  reset() {
-    if (
-      this.type !== nodeTypes.start &&
-      this.type !== nodeTypes.end &&
-      this.type !== nodeTypes.obstacle
-    ) {
-      this.type = nodeTypes.empty;
-    }
-
+  clear() {
+    this.type = nodeTypes.empty;
+  }
+  reset(resetObstacles = false) {
     if (this.type === nodeTypes.start) {
       this.g = 0;
     } else {
       this.g = null;
     }
+    if (this.type === nodeTypes.obstacle && resetObstacles) this.clear;
+    if (this.type === nodeTypes.end) {
+      this.previous = null;
+      this.h = this.proxToTarget;
+    }
 
-    this.h = this.proxToTarget;
-    this.previous = null;
+    if (this.type === nodeTypes.visited) {
+      this.clear();
+      this.h = this.proxToTarget;
+      this.previous = null;
+    }
   }
 
   updateG(n) {
@@ -97,12 +96,9 @@ class Node {
 
   findDist(other) {
     //TODO : add support for euclidian distance as well
-    return round(
-      Math.sqrt(
-        dist(this.pos.x, this.pos.y, this.pos.x, other.pos.y) +
-          dist(this.pos.x, this.pos.y, other.pos.x, this.pos.y) ** 2
-      ),
-      2
+    return Math.sqrt(
+      myp5.dist(this.pos.x, this.pos.y, this.pos.x, other.pos.y) +
+        myp5.dist(this.pos.x, this.pos.y, other.pos.x, this.pos.y) ** 2
     );
   }
 }

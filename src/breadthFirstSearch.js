@@ -17,6 +17,7 @@ function breadthFirstSearch(nodes) {
     }
     if (nodeToCheck.type === nodeTypes.end) {
       queue = [];
+      endFound = true;
       break;
     }
     nbours.forEach((nbour) => {

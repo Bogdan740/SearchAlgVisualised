@@ -1,5 +1,3 @@
-let endFound = false;
-
 let openList = [startNode];
 
 function aStar() {

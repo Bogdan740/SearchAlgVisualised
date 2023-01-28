@@ -4,23 +4,26 @@
 
 ## Changes and improvements ideas
 
-### Snapping type animation when moving around the start and end nodes [ ]
-
-Would allow the user to see where they will drop the start/end node before letting go of the mouse button
-
-### Overhaul of the user interface [ ]
+### Overhaul of the user interface
 
 **Not intuititive to use the spacebar to add walls** : Add functionality to add walls by clicking & draging left mouse button
 
 **Currently can not remove walls**: Add functionality to remove walls by clicking on existing walls
 
-### Remove the moving algorithm selector [ ]
+**Remove the moving algorithm selector and update UI** : Replace it with a stationary configurations tab
 
-Replace it with a header bar where an algorithm can be selected
+**Snapping type animation when moving around the start and end node** : Would allow the user to see where they will drop the start/end node before letting go of the mouse button
 
-### Allow for other configurations [ ]
+### Allow for other configurations
 
-- [ ] Colour scheme (high contrast for accesibility)
-- [ ] Individual square/node size
-- [ ] Grid size (N x M squares)
-- [ ] Allow toggle between euclidian and manhattan distance
+- Individual square/node size (WON'T DO)
+- Grid size (N x M squares) (WON'T DO)
+- [ ] Allow toggle between euclidian and manhattan distance (HIGH PRIORITY)
+- [ ] Colour scheme (high contrast for accesibility) (LOW PRIORITY)
+
+### Pathfinding algorithms to add
+
+- [ ] Breadth-first search (will find shortest path)
+- [ ] A\* search (will find shortest path)
+- [ ] Djikstra's search - (will find shortest path) **NOTE** : Exact same as BFS in an unweighted graph
+- [ ] Greedy best-first search - (will find a path)
