@@ -7,9 +7,7 @@ class GridNode {
     this.type = type;
     this.squareSize = squareSize;
 
-    // TODO : Add support for the euclidian distance
-    this.proxToTarget =
-      myp5.dist(posx, posy, posx, target.y) + myp5.dist(posx, posy, target.x, posy);
+    this.proxToTarget = this.findDist(targetNode.x, targetNode.y);
 
     if (type === nodeTypes.start) {
       this.g = 0;
@@ -36,13 +34,13 @@ class GridNode {
     }
     myp5.fill(col);
     myp5.rect(this.realPos.x, this.realPos.y, this.squareSize - offset, this.squareSize - offset);
-    // stroke('black');
+    // myp5.stroke('black');
     // myp5.fill('black');
-    // textSize(15);
-    // text(
+    // myp5.textSize(11);
+    // myp5.text(
     //   `g : ${this.g}, h : ${this.h}, f : ${this.g + this.h}`,
-    //   this.realPos.x + 30,
-    //   this.realPos.y + 30
+    //   this.realPos.x + 15,
+    //   this.realPos.y + 15
     // );
     myp5.pop();
   }
@@ -55,20 +53,20 @@ class GridNode {
     this.type = nodeTypes.empty;
   }
   reset(resetObstacles = false) {
+    this.proxToTarget = this.findDist(targetNode.x, targetNode.y);
+    this.h = this.proxToTarget;
     if (this.type === nodeTypes.start) {
       this.g = 0;
     } else {
       this.g = null;
     }
-    if (this.type === nodeTypes.obstacle && resetObstacles) this.clear;
+    if (this.type === nodeTypes.obstacle && resetObstacles) this.clear();
     if (this.type === nodeTypes.end) {
       this.previous = null;
-      this.h = this.proxToTarget;
     }
 
     if (this.type === nodeTypes.visited) {
       this.clear();
-      this.h = this.proxToTarget;
       this.previous = null;
     }
   }
@@ -94,11 +92,14 @@ class GridNode {
     }
   }
 
-  findDist(other) {
-    //TODO : add support for euclidian distance as well
-    return Math.sqrt(
-      myp5.dist(this.pos.x, this.pos.y, this.pos.x, other.pos.y) +
-        myp5.dist(this.pos.x, this.pos.y, other.pos.x, this.pos.y) ** 2
-    );
+  findDist(x, y) {
+    if (distanceType === distanceTypes.manhattan) {
+      return (
+        myp5.dist(this.pos.x, this.pos.y, this.pos.x, y) +
+        myp5.dist(this.pos.x, this.pos.y, x, this.pos.y)
+      );
+    } else if (distanceType === distanceTypes.euclidian) {
+      return myp5.round(myp5.dist(this.pos.x, this.pos.y, x, y), 2);
+    }
   }
 }

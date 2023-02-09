@@ -32,7 +32,7 @@ function breadthFirstSearch(nodes) {
 
   if (queue.length == 0 && pathway.length == 0) {
     // Find the pathway starting from the end node and working backwards, store it in pathway
-    findPathway(targetNode[0], targetNode[1]);
+    findPathway(targetNode.x, targetNode.y);
   }
 }
 

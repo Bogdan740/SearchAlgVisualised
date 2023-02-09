@@ -15,18 +15,22 @@ function aStar() {
       let nx = currentPos[0] + nbour[0];
       let ny = currentPos[1] + nbour[1];
 
-      if (
-        isValidNbour(nx, ny, gridSize) &&
-        nodes[nx][ny].isTraversable() &&
-        !nodes[nx][ny].isVisited()
-      ) {
+      if (isValidNbour(nx, ny, gridSize) && nodes[nx][ny].isTraversable()) {
         let curNbour = nodes[nx][ny];
         if (
-          (inArrofArr([nx, ny], openList) && current.g + current.findDist(curNbour) < curNbour.g) ||
+          (inArrofArr([nx, ny], openList) &&
+            current.g + current.findDist(curNbour.pos.x, curNbour.pos.y) < curNbour.g) ||
           !inArrofArr([nx, ny], openList)
         ) {
           curNbour.setPrevious(current);
-          curNbour.g = current.g + current.findDist(curNbour);
+          // console.log(
+          //   current.pos.x,
+          //   current.pos.y,
+          //   curNbour.pos.x,
+          //   curNbour.pos.y,
+          //   current.findDist(curNbour.pos.x, curNbour.pos.y)
+          // );
+          curNbour.g = current.g + current.findDist(curNbour.pos.x, curNbour.pos.y);
           if (!inArrofArr([nx, ny], openList)) {
             openList.push([nx, ny]);
           }
@@ -35,7 +39,7 @@ function aStar() {
     });
   } else {
     if (pathway.length === 0) {
-      findPathway(targetNode[0], targetNode[1]);
+      findPathway(targetNode.x, targetNode.y);
     }
   }
 }

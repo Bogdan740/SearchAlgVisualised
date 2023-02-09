@@ -4,6 +4,7 @@ let sketch = function (p) {
     squareSize = Math.floor(w / gridSize);
     // Initialize the grid of nodes
     initNodes(nodes);
+    // p.frameRate(0.5);
   };
   p.draw = function () {
     if (algToUse === searchAlgorithms.aStar) {
@@ -12,7 +13,6 @@ let sketch = function (p) {
       if (pathway.length !== 0) {
         drawPathway(pathway);
       }
-      // Using the left mouse button to add obstaclesw
     } else if (algToUse === searchAlgorithms.bfs) {
       breadthFirstSearch(nodes);
       drawNodes(nodes);
@@ -63,11 +63,11 @@ let sketch = function (p) {
         let type = nodeTypes.empty;
         if (i == startNode[0] && j == startNode[1]) {
           type = nodeTypes.start;
-        } else if (i === targetNode[0] && j === targetNode[1]) {
+        } else if (i === targetNode.x && j === targetNode.y) {
           type = nodeTypes.end;
         }
         strip.push(
-          new GridNode(i, j, squareSize, p.createVector(targetNode[0], targetNode[1]), type, false)
+          new GridNode(i, j, squareSize, p.createVector(targetNode.x, targetNode.y), type, false)
         );
       }
       nodes[i] = strip;
@@ -105,17 +105,5 @@ let sketch = function (p) {
     touchedWhileMousePressed = [];
   }
 };
-
-// let sketch = (p) => {
-//   p.setup = () => {
-//     p.createCanvas(500, 500);
-//     p.background(0);
-//   };
-//   p.draw = () => {
-//     if (p.frameCount % 60 === 0) {
-//       p.background(p.random(0, 255), p.random(0, 255), p.random(0, 255));
-//     }
-//   };
-// };
 
 let myp5 = new p5(sketch, 'ting');

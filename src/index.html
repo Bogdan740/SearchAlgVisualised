@@ -35,30 +35,28 @@
 <body>
   <div class="flex">
     <div id="ting" class=""></div>
-
     <div class="px-8">
+
       <div class="py-16">
         <h1>Configurations</h1>
         <div class="py-2">
           <h2>Algorithm</h2>
           <div>
-
             <input type="radio" id="A* Search" name="search-algorithm" value="A* Search" checked="checked">
             <label for="A* Search">A* Search</label><br>
             <input type="radio" id="BFS" name="search-algorithm" value="Breadth First Search">
             <label for="BFS">Breadth First Search</label><br>
           </div>
         </div>
-      </div>
-
-      <div>
-        <div class="py-2">
-          <h2 id="alg-config">Advanced configs for A* Search</h2>
+        <h2 id="alg-config">Advanced configs for A* Search</h2>
+        <div>
+          <input type="radio" id="Manhattan" name="distance-type" value="Manhattan" checked="checked">
+          <label for="Manhattan">Manhattan distance</label><br>
+          <input type="radio" id="Euclidian distance" name="distance-type" value="Euclidian">
+          <label for="Euclidian distance">Euclidian distance</label><br>
         </div>
       </div>
     </div>
-
-  </div>
 </body>
 
 </html>
