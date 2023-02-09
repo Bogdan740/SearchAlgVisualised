@@ -55,20 +55,16 @@ class GridNode {
   reset(resetObstacles = false) {
     this.proxToTarget = this.findDist(targetNode.x, targetNode.y);
     this.h = this.proxToTarget;
+    this.previous = null;
+    this.g = null;
     if (this.type === nodeTypes.start) {
       this.g = 0;
     } else {
       this.g = null;
     }
-    if (this.type === nodeTypes.obstacle && resetObstacles) this.clear();
-    if (this.type === nodeTypes.end) {
-      this.previous = null;
-    }
 
-    if (this.type === nodeTypes.visited) {
+    if ((this.type === nodeTypes.obstacle && resetObstacles) || this.type == nodeTypes.visited)
       this.clear();
-      this.previous = null;
-    }
   }
 
   updateG(n) {

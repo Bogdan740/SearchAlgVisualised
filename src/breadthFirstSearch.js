@@ -1,8 +1,5 @@
 let queue = [[...startNode, null]];
 
-function resetDFS() {
-  queue = [];
-}
 function breadthFirstSearch(nodes) {
   for (let i = 0; i < queue.length; i++) {
     let [cx, cy, previousNode] = queue.shift();

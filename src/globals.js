@@ -6,6 +6,7 @@ let targetNode = myp5.createVector(gridSize - 1, gridSize - 1);
 let touchedWhileMousePressed = [];
 let pathway = [];
 let endFound = false;
+let allowDiags;
 
 let [w, h] = [800, 800];
 const nodeTypes = {
@@ -27,15 +28,11 @@ const distanceTypes = {
   euclidian: 'euclidian',
 };
 
-const nbours = [
+let nbours = [
   [1, 0],
   [0, 1],
   [-1, 0],
   [0, -1],
-  [1, -1],
-  [-1, 1],
-  [1, 1],
-  [-1, -1],
 ];
 
 let algToUse = searchAlgorithms.aStar;

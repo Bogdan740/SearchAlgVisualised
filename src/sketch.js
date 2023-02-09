@@ -41,8 +41,6 @@ let sketch = function (p) {
         15
       );
     }
-    p.pop();
-    p.push();
     p.stroke('yellow');
     p.noFill();
     p.strokeWeight(4);
