@@ -23,25 +23,23 @@ class GridNode {
     myp5.push();
     let col = 'white';
     // TODO : Use a case statement
-    if (this.type == nodeTypes.start) {
-      col = 'green';
-    } else if (this.type === nodeTypes.end) {
-      col = 'red';
-    } else if (this.type === nodeTypes.visited) {
-      col = 'blue';
-    } else if (this.type === nodeTypes.obstacle) {
-      col = 'black';
+    switch (this.type) {
+      case nodeTypes.start:
+        col = 'green';
+        break;
+      case nodeTypes.end:
+        col = 'red';
+        break;
+      case nodeTypes.visited:
+        col = 'blue';
+        break;
+      case nodeTypes.obstacle:
+        col = 'black';
+        break;
     }
+
     myp5.fill(col);
     myp5.rect(this.realPos.x, this.realPos.y, this.squareSize - offset, this.squareSize - offset);
-    // myp5.stroke('black');
-    // myp5.fill('black');
-    // myp5.textSize(11);
-    // myp5.text(
-    //   `g : ${this.g}, h : ${this.h}, f : ${this.g + this.h}`,
-    //   this.realPos.x + 15,
-    //   this.realPos.y + 15
-    // );
     myp5.pop();
   }
 
