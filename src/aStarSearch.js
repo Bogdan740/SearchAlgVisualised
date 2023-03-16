@@ -23,13 +23,6 @@ function aStar() {
           !inArrofArr([nx, ny], openList)
         ) {
           curNbour.setPrevious(current);
-          // console.log(
-          //   current.pos.x,
-          //   current.pos.y,
-          //   curNbour.pos.x,
-          //   curNbour.pos.y,
-          //   current.findDist(curNbour.pos.x, curNbour.pos.y)
-          // );
           curNbour.g = current.g + current.findDist(curNbour.pos.x, curNbour.pos.y);
           if (!inArrofArr([nx, ny], openList)) {
             openList.push([nx, ny]);
