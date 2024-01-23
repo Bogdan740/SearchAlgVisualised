@@ -36,7 +36,7 @@ function aStar() {
     }
   }
 }
-
+// TODO : use a hashmap
 function inArrofArr(item, arr) {
   for (let i = 0; i < arr.length; i++) {
     if (arr[i][0] === item[0] && arr[i][1] === item[1]) {
