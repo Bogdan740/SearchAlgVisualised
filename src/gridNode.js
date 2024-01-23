@@ -1,13 +1,14 @@
 let offset = 0;
 
 class GridNode {
+  // TODO : remove target from constructor
   constructor(posx, posy, squareSize, target, type) {
     this.pos = myp5.createVector(posx, posy);
     this.realPos = myp5.createVector(this.pos.x * squareSize, this.pos.y * squareSize);
     this.type = type;
     this.squareSize = squareSize;
 
-    this.proxToTarget = this.findDist(targetNode.x, targetNode.y);
+    this.proxToTarget = this.findDist(targetNode[0], targetNode[1]);
 
     if (type === nodeTypes.start) {
       this.g = 0;
@@ -19,7 +20,7 @@ class GridNode {
     this.previous = null;
   }
 
-  show() {
+  show(useNoStroke = false) {
     myp5.push();
     let col = 'white';
     // TODO : Use a case statement
@@ -39,6 +40,9 @@ class GridNode {
     }
 
     myp5.fill(col);
+    if (useNoStroke || this.type == nodeTypes.start || this.type == nodeTypes.end) {
+      myp5.noStroke();
+    }
     myp5.rect(this.realPos.x, this.realPos.y, this.squareSize - offset, this.squareSize - offset);
     myp5.pop();
   }
@@ -51,7 +55,7 @@ class GridNode {
     this.type = nodeTypes.empty;
   }
   reset(resetObstacles = false) {
-    this.proxToTarget = this.findDist(targetNode.x, targetNode.y);
+    this.proxToTarget = this.findDist(targetNode[0], targetNode[1]);
     this.h = this.proxToTarget;
     this.previous = null;
     this.g = null;
@@ -65,6 +69,13 @@ class GridNode {
       this.clear();
   }
 
+  moveTo(x, y) {
+    this.realPos = myp5.createVector(x, y);
+  }
+
+  setIndex(x, y) {
+    this.pos = myp5.createVector(x, y);
+  }
   updateG(n) {
     this.g = n;
   }

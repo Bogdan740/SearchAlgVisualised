@@ -32,7 +32,7 @@ function aStar() {
     });
   } else {
     if (pathway.length === 0) {
-      findPathway(targetNode.x, targetNode.y);
+      findPathway(targetNode[0], targetNode[1]);
     }
   }
 }
