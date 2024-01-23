@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Document</title>
+
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+      border: 0px
+    }
+
+    /* html,
+    head,
+    body {
+      height: 100%;
+      width: 100%;
+    } */
+  </style>
+
+  <link rel='stylesheet' href='src/css/output.css'>
+  <script src='https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js'></script>
+  <script src='src/sketch.js'></script>
+  <script src='src/globals.js'></script>
+  <script src='src/gridNode.js'></script>
+  <script src='src/aStarSearch.js'></script>
+  <script src='src/breadthFirstSearch.js'></script>
+  <script src='src/script.js' defer></script>
+</head>
+
+<body>
+  <div class='flex '>
+    <div id='ting'></div>
+    <div class='px-8 select-none'>
+      <div class='py-16'>
+        <h1 class='font-bold'>Configurations</h1>
+        <div class='py-2'>
+          <h2 class='font-semibold'>Algorithm</h2>
+          <div>
+            <input type='radio' id='A* Search' name='search-algorithm' value='A* Search' checked='checked'>
+            <label for='A* Search'>A* Search</label><br>
+            <input type='radio' id='BFS' name='search-algorithm' value='Breadth First Search'>
+            <label for='BFS'>Breadth First Search</label><br>
+          </div>
+        </div>
+        <h2 id='alg-config' class='font-semibold'>Advanced configs for A* Search</h2>
+        <div class='border-2 border-blue-100 p-2'>
+          <input type='radio' id='Manhattan' name='distance-type' value='Manhattan' checked='checked'>
+          <label for='Manhattan'>Manhattan distance</label><br>
+          <input type='radio' id='Euclidian distance' name='distance-type' value='Euclidian'>
+          <label for='Euclidian distance'>Euclidian distance</label><br>
+        </div>
+        <div>
+          <input type='checkbox' id='allow-diags'>
+          <label for='allow-diags'>Allow diagonals</label><br>
+        </div>
+      </div>
+    </div>
+</body>
+
+</html>
