@@ -4,7 +4,7 @@
 
 ### Overhaul of the user interface
 
-[ ] **Not intuititive to use the spacebar to add walls** : Add functionality to add walls by clicking & draging left mouse button
+[x] **Not intuititive to use the spacebar to add walls** : Add functionality to add walls by clicking & draging left mouse button
 
 [ ] **Currently can not remove walls**: Add functionality to remove walls by clicking on existing walls
 
@@ -24,4 +24,4 @@
 - [x] Breadth-first search (will find shortest path)
 - [x] A\* search (will find shortest path)
 - [x] Djikstra's search - (will find shortest path) **NOTE** : Exact same as BFS in an unweighted graph
-- [ ] Greedy best-first search - (will find a path)
+- [x] Greedy best-first search - (will find a path)
