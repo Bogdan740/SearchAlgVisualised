@@ -38,6 +38,7 @@ function isValidNbour(nx, ny, gridSize) {
 }
 
 function findPathway(x, y) {
+  pathway = [];
   let currentNode = nodes[x][y];
   while (currentNode) {
     pathway.push(currentNode.pos);
