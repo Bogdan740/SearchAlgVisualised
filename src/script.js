@@ -3,17 +3,30 @@ const body = document.body;
 const radioSearchAlg = document.getElementsByName('search-algorithm');
 const radioDistanceType = document.getElementsByName('distance-type');
 
-const allowDiagonals = document.getElementById('allow-diags');
+const allowDiagonalsCheckbox = document.getElementById('allow-diags');
+handleDiagonalsCheckboxChange(allowDiagonalsCheckbox.checked);
+
+const showPathCheckbox = document.getElementById('show-path');
+const showPathLabel = document.getElementById('show-path-label');
+handleShowPathCheckboxChange(showPathCheckbox.checked);
 
 const extraConfig = document.getElementById('alg-config');
 
 // Change which algorithm is used to find a path
 for (let i = 0; i < radioSearchAlg.length; i++) {
   radioSearchAlg[i].addEventListener('change', () => {
-    extraConfig.innerText = `Advanced configs for ${radioSearchAlg[i].value}`;
-    if (radioSearchAlg[i].value === 'A* Search') {
+    const searchAlg = radioSearchAlg[i].value;
+    extraConfig.innerText = `Advanced configs for ${searchAlg}`;
+    if (searchAlg !== searchAlgorithms.aStar) {
+      showPathCheckbox.style.display = 'none';
+      showPathLabel.style.display = 'none';
+    }
+
+    if (searchAlg === 'A* Search') {
       algToUse = searchAlgorithms.aStar;
-    } else if (radioSearchAlg[i].value === 'Breadth First Search') {
+      showPathCheckbox.style.display = 'inline-block';
+      showPathLabel.style.display = 'inline-block';
+    } else if (searchAlg === 'Breadth First Search') {
       algToUse = searchAlgorithms.bfs;
     }
     myp5.resetGrid();
@@ -32,8 +45,18 @@ for (let i = 0; i < radioDistanceType.length; i++) {
   });
 }
 
-allowDiagonals.addEventListener('change', () => {
-  if (allowDiagonals.checked) {
+allowDiagonalsCheckbox.addEventListener('change', () => {
+  handleDiagonalsCheckboxChange(allowDiagonalsCheckbox.checked);
+  myp5.resetGrid();
+});
+
+showPathCheckbox.addEventListener('change', () => {
+  handleShowPathCheckboxChange(showPathCheckbox.checked);
+  myp5.resetGrid();
+});
+
+function handleDiagonalsCheckboxChange(isChecked) {
+  if (isChecked) {
     nbours = [
       [1, 0],
       [0, 1],
@@ -52,5 +75,8 @@ allowDiagonals.addEventListener('change', () => {
       [0, -1],
     ];
   }
-  myp5.resetGrid();
-});
+}
+
+function handleShowPathCheckboxChange(isChecked) {
+  showPathConfig = isChecked;
+}
