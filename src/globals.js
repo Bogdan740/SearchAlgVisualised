@@ -41,3 +41,4 @@ let nbours = [
 let algToUse = searchAlgorithms.aStar;
 let distanceType = distanceTypes.manhattan;
 let showPathConfig = true;
+let algorithmSpeed = 1;

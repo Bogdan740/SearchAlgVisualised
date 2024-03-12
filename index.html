@@ -33,7 +33,7 @@
 </head>
 
 <body>
-  <div class='flex '>
+  <div class='flex'>
     <div id='ting'></div>
     <div class='px-8 select-none'>
       <div class='py-16'>
@@ -49,18 +49,22 @@
             <label for='GBF'>Greedy Best First Search</label><br>
           </div>
         </div>
-        <h2 id='alg-config' class='font-semibold'>Advanced configs for A* Search</h2>
+        <h2 id='alg-config' class='font-semibold'>Configurations</h2>
         <div class='border-2 border-blue-100 p-2'>
           <input type='radio' id='Manhattan' name='distance-type' value='Manhattan' checked='checked'>
           <label for='Manhattan'>Manhattan distance</label><br>
           <input type='radio' id='Euclidian distance' name='distance-type' value='Euclidian'>
           <label for='Euclidian distance'>Euclidian distance</label><br>
+          <input type='checkbox' id='allow-diags'>
+          <label for='allow-diags'>Allow diagonals</label><br>
           <input type='checkbox' id='show-path' checked="true">
           <label for='show-path' id="show-path-label">Show Path</label><br>
         </div>
         <div>
-          <input type='checkbox' id='allow-diags'>
-          <label for='allow-diags'>Allow diagonals</label><br>
+          <div>
+            <label for="alg-speed">Algorithm Speed</label>
+            <input type="range" min="1" max="10" value="10" step="1" class="slider" id="alg-speed">
+          </div>
         </div>
       </div>
     </div>

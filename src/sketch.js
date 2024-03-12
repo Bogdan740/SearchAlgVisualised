@@ -8,18 +8,8 @@ let sketch = function (p) {
     p.frameRate(120);
   };
   p.draw = function () {
-    p.background(255);
-    let fps = p.frameRate();
-    p.fill(0);
-    p.stroke(0);
-    p.text('FPS: ' + fps.toFixed(0), 10, p.height - 10);
-
-    if (algToUse === searchAlgorithms.aStar) {
-      aStar(nodes);
-    } else if (algToUse === searchAlgorithms.bfs) {
-      breadthFirstSearch(nodes);
-    } else if (algToUse === searchAlgorithms.greedyBestFirst) {
-      aStar(nodes, pickGreedyBestFirst);
+    if (p.frameCount % algorithmSpeed == 0) {
+      runSearchAlgorithm();
     }
 
     drawNodes(nodes);
@@ -72,6 +62,16 @@ let sketch = function (p) {
     }
     p.endShape();
     p.pop();
+  }
+
+  function runSearchAlgorithm() {
+    if (algToUse === searchAlgorithms.aStar) {
+      aStar(nodes);
+    } else if (algToUse === searchAlgorithms.bfs) {
+      breadthFirstSearch(nodes);
+    } else if (algToUse === searchAlgorithms.greedyBestFirst) {
+      aStar(nodes, pickGreedyBestFirst);
+    }
   }
   function initNodes(nodes) {
     for (let i = 0; i < gridSize; i++) {

@@ -12,6 +12,9 @@ handleShowPathCheckboxChange(showPathCheckbox.checked);
 
 const extraConfig = document.getElementById('alg-config');
 
+const algSpeedSlider = document.getElementById('alg-speed');
+handleAlgSpeedSliderChange(algSpeedSlider.value);
+
 // Change which algorithm is used to find a path
 for (let i = 0; i < radioSearchAlg.length; i++) {
   radioSearchAlg[i].addEventListener('change', () => {
@@ -53,6 +56,10 @@ showPathCheckbox.addEventListener('change', () => {
   myp5.resetGrid();
 });
 
+algSpeedSlider.addEventListener('change', () => {
+  handleAlgSpeedSliderChange(algSpeedSlider.value);
+});
+
 function handleDiagonalsCheckboxChange(isChecked) {
   if (isChecked) {
     nbours = [
@@ -77,4 +84,9 @@ function handleDiagonalsCheckboxChange(isChecked) {
 
 function handleShowPathCheckboxChange(isChecked) {
   showPathConfig = isChecked;
+}
+
+function handleAlgSpeedSliderChange(value) {
+  setAlgorithmSpeed = true;
+  algorithmSpeed = 11 - value;
 }
