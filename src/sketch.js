@@ -4,21 +4,24 @@ let sketch = function (p) {
     squareSize = Math.floor(w / gridSize);
     // Initialize the grid of nodes
     initNodes(nodes);
-    // p.frameRate(0.5);
+    p.frameRate(120);
   };
   p.draw = function () {
+    p.background(255);
+    let fps = p.frameRate();
+    p.fill(0);
+    p.stroke(0);
+    p.text('FPS: ' + fps.toFixed(0), 10, p.height - 10);
+
     if (algToUse === searchAlgorithms.aStar) {
       aStar(nodes);
-      drawNodes(nodes);
-      if (pathway.length !== 0) {
-        drawPathway(pathway);
-      }
     } else if (algToUse === searchAlgorithms.bfs) {
       breadthFirstSearch(nodes);
-      drawNodes(nodes);
-      if (pathway.length !== 0) {
-        drawPathway(pathway);
-      }
+    }
+
+    drawNodes(nodes);
+    if (pathway.length !== 0) {
+      drawPathway(pathway);
     }
 
     if (p.mouseIsPressed === true && !movingStartNode && !movingTargetNode) {
@@ -108,6 +111,9 @@ let sketch = function (p) {
     endFound = false;
     queue = [startNode];
     openList = [startNode];
+    openListSet.clear();
+    openListSet.add(hashToStr(startNode));
+    console.time('pathTimer');
   };
 
   p.keyPressed = () => {
