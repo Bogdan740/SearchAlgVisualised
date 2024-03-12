@@ -99,10 +99,7 @@ class GridNode {
 
   findDist(x, y) {
     if (distanceType === distanceTypes.manhattan) {
-      return (
-        myp5.dist(this.pos.x, this.pos.y, this.pos.x, y) +
-        myp5.dist(this.pos.x, this.pos.y, x, this.pos.y)
-      );
+      return Math.abs(this.pos.x - x) + Math.abs(this.pos.y - y);
     } else if (distanceType === distanceTypes.euclidian) {
       return myp5.round(myp5.dist(this.pos.x, this.pos.y, x, y), 2);
     }
