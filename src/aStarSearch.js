@@ -15,7 +15,7 @@ function aStar(nodes, pickFunction = pickAStar) {
       const nx = currentPos[0] + nbour[0];
       const ny = currentPos[1] + nbour[1];
 
-      if (isValidNbour(nx, ny, gridSize) && nodes[nx][ny].isTraversable()) {
+      if (isWithinBounds(nx, ny, gridSize) && nodes[nx][ny].isTraversable()) {
         const curNbour = nodes[nx][ny];
         const notInOpenList = !inOpenList([nx, ny]);
         if (

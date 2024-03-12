@@ -15,12 +15,14 @@ const extraConfig = document.getElementById('alg-config');
 const algSpeedSlider = document.getElementById('alg-speed');
 handleAlgSpeedSliderChange(algSpeedSlider.value);
 
+const editModeCheckbox = document.getElementById('edit-mode');
+handleChangeEditModeCheckbox(editModeCheckbox.checked);
+
 // Change which algorithm is used to find a path
 for (let i = 0; i < radioSearchAlg.length; i++) {
   radioSearchAlg[i].addEventListener('change', () => {
     const searchAlg = radioSearchAlg[i].value;
     extraConfig.innerText = `Advanced configs for ${searchAlg}`;
-    console.log(searchAlg);
     if (searchAlg === searchAlgorithms.aStar || searchAlg === searchAlgorithms.greedyBestFirst) {
       showPathCheckbox.style.display = 'inline-block';
       showPathLabel.style.display = 'inline-block';
@@ -60,6 +62,10 @@ algSpeedSlider.addEventListener('change', () => {
   handleAlgSpeedSliderChange(algSpeedSlider.value);
 });
 
+editModeCheckbox.addEventListener('change', () => {
+  handleChangeEditModeCheckbox(editModeCheckbox.checked);
+});
+
 function handleDiagonalsCheckboxChange(isChecked) {
   if (isChecked) {
     nbours = [
@@ -89,4 +95,8 @@ function handleShowPathCheckboxChange(isChecked) {
 function handleAlgSpeedSliderChange(value) {
   setAlgorithmSpeed = true;
   algorithmSpeed = 11 - value;
+}
+
+function handleChangeEditModeCheckbox(isChecked) {
+  drawingMode = !isChecked;
 }

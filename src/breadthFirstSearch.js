@@ -21,7 +21,7 @@ function breadthFirstSearch(nodes) {
       let nx = nodeToCheck.pos.x + nbour[0];
       let ny = nodeToCheck.pos.y + nbour[1];
 
-      if (isValidNbour(nx, ny, gridSize) && nodes[nx][ny].isTraversable) {
+      if (isWithinBounds(nx, ny, gridSize) && nodes[nx][ny].isTraversable) {
         queue.push([nx, ny, nodeToCheck]);
       }
     });
@@ -33,7 +33,7 @@ function breadthFirstSearch(nodes) {
   }
 }
 
-function isValidNbour(nx, ny, gridSize) {
+function isWithinBounds(nx, ny, gridSize) {
   return 0 <= nx && nx < gridSize && 0 <= ny && ny < gridSize;
 }
 

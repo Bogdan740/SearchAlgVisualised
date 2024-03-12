@@ -18,11 +18,12 @@ let sketch = function (p) {
     }
 
     if (p.mouseIsPressed === true && !movingStartNode && !movingTargetNode) {
-      let i = Math.floor(p.mouseX / squareSize);
-      let j = Math.floor(p.mouseY / squareSize);
-      if (isValidNbour(i, j, gridSize) && !touchedWhileMousePressed.includes(nodes[i][j])) {
-        nodes[i][j].setType(nodeTypes.obstacle);
-        touchedWhileMousePressed.push(nodes[i][j]);
+      const i = Math.floor(p.mouseX / squareSize);
+      const j = Math.floor(p.mouseY / squareSize);
+      if (isWithinBounds(i, j, gridSize)) {
+        const node = nodes[i][j];
+        if (drawingMode && node.type !== nodeTypes.obstacle) node.setType(nodeTypes.obstacle);
+        else if (!drawingMode && node.type === nodeTypes.obstacle) node.setType(nodeTypes.empty);
       }
     }
 

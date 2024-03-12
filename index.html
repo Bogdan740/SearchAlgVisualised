@@ -13,13 +13,6 @@
       margin: 0px;
       border: 0px
     }
-
-    /* html,
-    head,
-    body {
-      height: 100%;
-      width: 100%;
-    } */
   </style>
 
   <link rel='stylesheet' href='src/css/output.css'>
@@ -37,11 +30,13 @@
     <div id='ting'></div>
     <div class='px-8 select-none'>
       <div class='py-16'>
+        <input type='checkbox' id='edit-mode'>
+        <label for='edit-mode' id="edit-mode-label">Erase Obstacles</label><br>
         <h1 class='font-bold'>Configurations</h1>
         <div class='py-2'>
           <h2 class='font-semibold'>Algorithm</h2>
           <div>
-            <input type='radio' id='A* Search' name='search-algorithm' value='aStar' checked='checked'>
+            <input type='radio' id='A* Search' name='search-algorithm' value='aStar' checked>
             <label for='A* Search'>A* Search</label><br>
             <input type='radio' id='BFS' name='search-algorithm' value='bfs'>
             <label for='BFS'>Breadth First Search</label><br>
@@ -51,13 +46,13 @@
         </div>
         <h2 id='alg-config' class='font-semibold'>Configurations</h2>
         <div class='border-2 border-blue-100 p-2'>
-          <input type='radio' id='Manhattan' name='distance-type' value='Manhattan' checked='checked'>
+          <input type='radio' id='Manhattan' name='distance-type' value='Manhattan' checked>
           <label for='Manhattan'>Manhattan distance</label><br>
           <input type='radio' id='Euclidian distance' name='distance-type' value='Euclidian'>
           <label for='Euclidian distance'>Euclidian distance</label><br>
           <input type='checkbox' id='allow-diags'>
           <label for='allow-diags'>Allow diagonals</label><br>
-          <input type='checkbox' id='show-path' checked="true">
+          <input type='checkbox' id='show-path' checked>
           <label for='show-path' id="show-path-label">Show Path</label><br>
         </div>
         <div>

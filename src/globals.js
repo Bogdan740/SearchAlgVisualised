@@ -1,9 +1,8 @@
-let gridSize = 25; // Number of squares in one row/col of the N x N grid
+const gridSize = 25; // Number of squares in one row/col of the N x N grid
 let squareSize; // Side length of individual square in the grid
 let nodes = [];
 let startNode = [10, 10];
 let targetNode = [gridSize - 1, gridSize - 1];
-let touchedWhileMousePressed = [];
 let pathway = [];
 let endFound = false;
 let allowDiags;
@@ -42,3 +41,4 @@ let algToUse = searchAlgorithms.aStar;
 let distanceType = distanceTypes.manhattan;
 let showPathConfig = true;
 let algorithmSpeed = 1;
+let drawingMode = true;
