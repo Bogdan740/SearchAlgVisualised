@@ -23,7 +23,7 @@ const nodeTypes = {
 const searchAlgorithms = {
   aStar: 'aStar',
   bfs: 'bfs',
-  greedyBestFirst: 'gbf',
+  greedyBestFirst: 'gbfs',
 };
 
 const distanceTypes = {
