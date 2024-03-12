@@ -1,4 +1,4 @@
-let gridSize = 20; // Number of squares in one row/col of the N x N grid
+let gridSize = 30; // Number of squares in one row/col of the N x N grid
 let squareSize; // Side length of individual square in the grid
 let nodes = [];
 let startNode = [10, 10];
@@ -39,3 +39,4 @@ let nbours = [
 
 let algToUse = searchAlgorithms.aStar;
 let distanceType = distanceTypes.manhattan;
+let showPathConfig = true;
