@@ -1,9 +1,9 @@
 const openListSet = new Set();
 openListSet.add(hashToStr(startNode));
 
-function aStar(nodes) {
+function aStar(nodes, pickFunction = pickAStar) {
   if (!endFound) {
-    const currentPos = pick(openListSet);
+    const currentPos = pickFunction(openListSet);
     const currentNode = nodes[currentPos[0]][currentPos[1]];
     currentNode.setType(nodeTypes.visited);
     openListSet.delete(hashToStr(currentPos));
@@ -49,7 +49,7 @@ function hashToStr(item) {
   return `${item[0]}-${item[1]}`;
 }
 
-function pick(collection) {
+function pickAStar(collection) {
   let smallestFCost = Infinity;
   let smallestHCost = undefined;
   let positionPicked = undefined;
@@ -60,6 +60,22 @@ function pick(collection) {
     const fCost = node.g + node.h;
     if (fCost < smallestFCost || (fCost === smallestFCost && node.h < smallestHCost)) {
       smallestFCost = fCost;
+      smallestHCost = node.h;
+      positionPicked = [x, y];
+    }
+  });
+
+  return positionPicked;
+}
+
+function pickGreedyBestFirst(collection) {
+  let smallestHCost = Infinity;
+  let positionPicked = undefined;
+
+  collection.forEach((item) => {
+    const [x, y] = item.split('-').map((it) => parseInt(it));
+    const node = nodes[x][y];
+    if (node.h < smallestHCost) {
       smallestHCost = node.h;
       positionPicked = [x, y];
     }

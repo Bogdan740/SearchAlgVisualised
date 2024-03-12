@@ -1,4 +1,4 @@
-let gridSize = 30; // Number of squares in one row/col of the N x N grid
+let gridSize = 25; // Number of squares in one row/col of the N x N grid
 let squareSize; // Side length of individual square in the grid
 let nodes = [];
 let startNode = [10, 10];
@@ -23,6 +23,7 @@ const nodeTypes = {
 const searchAlgorithms = {
   aStar: 'aStar',
   bfs: 'bfs',
+  greedyBestFirst: 'gbf',
 };
 
 const distanceTypes = {

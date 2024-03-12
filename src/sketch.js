@@ -1,6 +1,7 @@
 let sketch = function (p) {
   p.setup = function () {
     p.createCanvas(w, h);
+    p.pixelDensity(2);
     squareSize = Math.floor(w / gridSize);
     // Initialize the grid of nodes
     initNodes(nodes);
@@ -17,6 +18,8 @@ let sketch = function (p) {
       aStar(nodes);
     } else if (algToUse === searchAlgorithms.bfs) {
       breadthFirstSearch(nodes);
+    } else if (algToUse === searchAlgorithms.greedyBestFirst) {
+      aStar(nodes, pickGreedyBestFirst);
     }
 
     drawNodes(nodes);
@@ -113,7 +116,6 @@ let sketch = function (p) {
     openList = [startNode];
     openListSet.clear();
     openListSet.add(hashToStr(startNode));
-    console.time('pathTimer');
   };
 
   p.keyPressed = () => {

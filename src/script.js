@@ -17,17 +17,20 @@ for (let i = 0; i < radioSearchAlg.length; i++) {
   radioSearchAlg[i].addEventListener('change', () => {
     const searchAlg = radioSearchAlg[i].value;
     extraConfig.innerText = `Advanced configs for ${searchAlg}`;
-    if (searchAlg !== searchAlgorithms.aStar) {
+    if ((searchAlg !== searchAlgorithms.aStar) | (searchAlg !== searchAlgorithms.greedyBestFirst)) {
       showPathCheckbox.style.display = 'none';
       showPathLabel.style.display = 'none';
+    } else {
+      showPathCheckbox.style.display = 'inline-block';
+      showPathLabel.style.display = 'inline-block';
     }
 
     if (searchAlg === 'A* Search') {
       algToUse = searchAlgorithms.aStar;
-      showPathCheckbox.style.display = 'inline-block';
-      showPathLabel.style.display = 'inline-block';
     } else if (searchAlg === 'Breadth First Search') {
       algToUse = searchAlgorithms.bfs;
+    } else if (searchAlg == 'Greedy Best First Search') {
+      algToUse = searchAlgorithms.greedyBestFirst;
     }
     myp5.resetGrid();
   });
