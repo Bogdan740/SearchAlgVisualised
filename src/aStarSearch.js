@@ -1,71 +1,69 @@
-let openList = [startNode];
+const openListSet = new Set();
+openListSet.add(hashToStr(startNode));
 
-function aStar() {
+function aStar(nodes) {
   if (!endFound) {
-    let [currentPos, openListIndex] = pick(openList);
-    let current = nodes[currentPos[0]][currentPos[1]];
-    current.setType(nodeTypes.visited);
-    openList.splice(openListIndex, 1);
+    const currentPos = pick(openListSet);
+    const currentNode = nodes[currentPos[0]][currentPos[1]];
+    currentNode.setType(nodeTypes.visited);
+    openListSet.delete(hashToStr(currentPos));
 
-    if (current.type === nodeTypes.end) {
+    if (currentNode.type === nodeTypes.end) {
       endFound = true;
     }
-
     nbours.forEach((nbour) => {
-      let nx = currentPos[0] + nbour[0];
-      let ny = currentPos[1] + nbour[1];
+      const nx = currentPos[0] + nbour[0];
+      const ny = currentPos[1] + nbour[1];
 
       if (isValidNbour(nx, ny, gridSize) && nodes[nx][ny].isTraversable()) {
-        let curNbour = nodes[nx][ny];
+        const curNbour = nodes[nx][ny];
+        const notInOpenList = !inOpenList([nx, ny]);
         if (
-          (inArrofArr([nx, ny], openList) &&
-            current.g + current.findDist(curNbour.pos.x, curNbour.pos.y) < curNbour.g) ||
-          !inArrofArr([nx, ny], openList)
+          currentNode.g + currentNode.findDist(curNbour.pos.x, curNbour.pos.y) < curNbour.g ||
+          notInOpenList
         ) {
-          curNbour.setPrevious(current);
-          curNbour.g = current.g + current.findDist(curNbour.pos.x, curNbour.pos.y);
-          if (!inArrofArr([nx, ny], openList)) {
-            openList.push([nx, ny]);
+          curNbour.setPrevious(currentNode);
+          curNbour.g = currentNode.g + currentNode.findDist(curNbour.pos.x, curNbour.pos.y);
+          d11 = performance.now();
+          if (notInOpenList) {
+            openListSet.add(hashToStr([nx, ny]));
           }
         }
       }
     });
+    if (showPathConfig) {
+      findPathway(currentPos[0], currentPos[1]);
+    }
   } else {
     if (pathway.length === 0) {
       findPathway(targetNode[0], targetNode[1]);
     }
   }
 }
-// TODO : use a hashmap
-function inArrofArr(item, arr) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i][0] === item[0] && arr[i][1] === item[1]) {
-      return true;
-    }
-  }
+
+function inOpenList(item) {
+  return openListSet.has(hashToStr(item));
 }
 
-function pick(arr) {
+function hashToStr(item) {
+  return `${item[0]}-${item[1]}`;
+}
+
+function pick(collection) {
   let smallestFCost = Infinity;
-  let smallestGCost = undefined;
   let smallestHCost = undefined;
-  let nodePicked = undefined;
-  let indexToReturn = undefined;
+  let positionPicked = undefined;
 
-  for (let i = 0; i < arr.length; i++) {
-    let [x, y] = arr[i];
-    let node = nodes[x][y];
-    if (
-      node.g + node.h < smallestFCost ||
-      (node.g + node.h === smallestFCost && node.h < smallestHCost)
-    ) {
-      smallestFCost = node.g + node.h;
-      smallestGCost = node.g;
+  collection.forEach((item) => {
+    const [x, y] = item.split('-').map((it) => parseInt(it));
+    const node = nodes[x][y];
+    const fCost = node.g + node.h;
+    if (fCost < smallestFCost || (fCost === smallestFCost && node.h < smallestHCost)) {
+      smallestFCost = fCost;
       smallestHCost = node.h;
-      nodePicked = arr[i];
-      indexToReturn = i;
+      positionPicked = [x, y];
     }
-  }
+  });
 
-  return [nodePicked, indexToReturn];
+  return positionPicked;
 }
