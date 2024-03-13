@@ -6,7 +6,7 @@
 
 [x] **Not intuititive to use the spacebar to add walls** : Add functionality to add walls by clicking & draging left mouse button
 
-[ ] **Currently can not remove walls**: Add functionality to remove walls by clicking on existing walls
+[x] **Currently can not remove walls**: Add functionality to remove walls by clicking on existing walls
 
 [x] **Remove the moving algorithm selector and update UI** : Replace it with a stationary configurations tab
 
